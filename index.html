@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ImNotBlue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #000510 0%, #001030 20%, #0a2080 50%, #1030c0 65%, #0a1a6a 80%, #000820 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Stars container */
+    #stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: rgba(190, 215, 255, 0.9);
+      border-radius: 0;
+      animation: twinkle var(--dur) ease-in-out infinite var(--delay);
+    }
+
+    @keyframes twinkle {
+      0%   { opacity: 0; }
+      50%  { opacity: var(--max-op); }
+      100% { opacity: 0; }
+    }
+
+    /* Glowing orb */
+    .orb {
+      position: fixed;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(40, 100, 255, 0.22) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      letter-spacing: 0.08em;
+      color: #fff;
+      text-shadow: 0 0 40px rgba(80, 140, 255, 0.7), 0 2px 20px rgba(0,0,0,0.8);
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.60);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 28px 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.6), 0 0 20px rgba(40, 80, 200, 0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .card-name {
+      text-align: center;
+      padding: 24px 32px;
+    }
+
+    .name-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .name-sub {
+      font-size: 0.82rem;
+      color: rgba(160, 180, 255, 0.55);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .card-section .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(160, 185, 255, 0.65);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #e8ecff;
+      font-size: 0.95rem;
+      font-weight: 400;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+      position: relative;
+    }
+
+    .link-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    .link-item .icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .icon-yt   { background: rgba(255, 40, 40, 0.18); color: #ff5555; }
+    .icon-tt   { background: rgba(255, 255, 255, 0.10); color: #eee; }
+    .icon-st   { background: rgba(25, 100, 180, 0.22); color: #6ab0f5; }
+    .icon-rb   { background: rgba(220, 50, 50, 0.18); color: #f07070; }
+    .icon-web  { background: rgba(80, 200, 140, 0.15); color: #7de0b0; }
+
+    .link-item .label { font-weight: 500; }
+
+    .link-item .arrow {
+      margin-left: auto;
+      opacity: 0.3;
+      font-size: 0.85rem;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+
+    .link-item:hover .arrow {
+      opacity: 0.7;
+      transform: translateX(3px);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stars"></div>
+  <div class="orb"></div>
+
+  <div class="page-title">ImNotBlue</div>
+
+  <div class="container">
+
+    <div class="card card-name">
+      <div class="name-text">ImNotBlue</div>
+      <div class="name-sub">profile</div>
+    </div>
+
+    <div class="card card-section">
+      <div class="section-title">Socials</div>
+      <div class="link-list">
+
+        <a class="link-item" href="https://www.youtube.com/@ImNotBlueFr" target="_blank" rel="noopener">
+          <span class="icon icon-yt">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .6 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.75 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </span>
+          <span class="label">YouTube</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="link-item" href="https://www.tiktok.com/@imnotbluefr" target="_blank" rel="noopener">
+          <span class="icon icon-tt">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 3a5.6 5.6 0 0 1-5.6-5.6h-4v14.2a2.4 2.4 0 1 1-2.4-2.4 2.4 2.4 0 0 1 .9.18V5.2A6.4 6.4 0 0 0 8 5a6.4 6.4 0 0 0 0 12.8 6.4 6.4 0 0 0 6.4-6.4V8.6A9.6 9.6 0 0 0 20 9.8V5.8A5.6 5.6 0 0 1 19.6 3z"/></svg>
+          </span>
+          <span class="label">TikTok</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="link-item" href="https://steamcommunity.com/id/ImNotBlueFrFr/" target="_blank" rel="noopener">
+          <span class="icon icon-st">
+            <svg width="16" height="16" viewBox="0 0 496 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M496 256c0 137-111.2 248-248.4 248-113.5 0-209.3-75.6-239-178.4l95.7 39.6c6.6 34.8 37.3 61.2 74 61.2 41.4 0 75-33.6 75-75V344l86.6-62.7c54.4-1.9 98.1-46.6 98.1-101.3 0-55.9-45.6-101.3-101.7-101.3-54.5 0-98.3 42.6-101.4 96.2L166.7 262c-13 .9-25.2 5.9-34.9 14.1L0 217.9C19.5 97.4 124.2 8 248 8c137.2 0 248 111 248 248zM163.7 380.9l-31.3-13c5.6 11.9 15.4 21.9 28.2 27.4 26.1 10.8 55.8-1.5 66.6-27.5 5.2-12.6 5.2-26.3.1-38.9-5.2-12.6-14.9-22.4-27.6-27.6-13.3-5.5-27.7-5.3-40.4-.5l32.3 13.4c19.2 7.9 28.4 29.9 20.5 49.2-7.9 19.2-29.9 28.4-49.2 20.5zm173.1-135.3c0-36.3 29.5-65.8 65.8-65.8 36.3 0 65.8 29.5 65.8 65.8 0 36.3-29.5 65.8-65.8 65.8-36.3 0-65.8-29.5-65.8-65.8zm11.5-.1c0 29.9 24.3 54.1 54.3 54.1 29.9 0 54.3-24.2 54.3-54.1 0-29.9-24.3-54.3-54.3-54.3-30 .1-54.3 24.4-54.3 54.3z"/>
+            </svg>
+          </span>
+          <span class="label">Steam</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="link-item" href="https://www.roblox.com/users/295075117/profile" target="_blank" rel="noopener">
+          <span class="icon icon-rb">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.53.03L0 19.54 19.47 24 24 4.49 4.53.03zm10.6 13.45l-5.2-1.27 1.27-5.2 5.2 1.27-1.27 5.2z"/></svg>
+          </span>
+          <span class="label">Roblox</span>
+          <span class="arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="card card-section">
+      <div class="section-title">Links</div>
+      <div class="link-list">
+
+        <a class="link-item" href="https://untitledgamewebsite.app" target="_blank" rel="noopener">
+          <span class="icon icon-web">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </span>
+          <span class="label">UntitledGameWebsite</span>
+          <span class="arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const container = document.getElementById('stars');
+    const COUNT = 140;
+
+    for (let i = 0; i < COUNT; i++) {
+      const el = document.createElement('div');
+      el.className = 'star';
+
+      const size = (1.5 + Math.random() * 3.5).toFixed(1);
+      const x = (Math.random() * 100).toFixed(2);
+      const y = (Math.random() * 100).toFixed(2);
+      const dur = (2.5 + Math.random() * 5).toFixed(2);
+      const delay = -(Math.random() * 6).toFixed(2);
+      const maxOp = (0.4 + Math.random() * 0.6).toFixed(2);
+
+      el.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}%;
+        top: ${y}%;
+        --dur: ${dur}s;
+        --delay: ${delay}s;
+        --max-op: ${maxOp};
+      `;
+
+      container.appendChild(el);
+    }
+  </script>
+
+</body>
+</html>
